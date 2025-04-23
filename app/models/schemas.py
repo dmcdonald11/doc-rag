@@ -3,7 +3,7 @@ Pydantic models for the application.
 """
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
-from services.mcp_service import MCPResponse
+from services.lightrag_service import LightRAGResponse
 
 class FileResponse(BaseModel):
     """
@@ -12,4 +12,4 @@ class FileResponse(BaseModel):
     filename: str
     status: str
     message: str
-    mcp_response: Optional[MCPResponse] = None 
+    lightrag_response: Optional[LightRAGResponse] = None 

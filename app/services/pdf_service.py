@@ -4,6 +4,7 @@ Service for handling PDF text extraction.
 from pathlib import Path
 from PyPDF2 import PdfReader
 from typing import Optional
+import unicodedata
 
 class PDFService:
     """
@@ -28,6 +29,8 @@ class PDFService:
             text = ""
             for page in reader.pages:
                 text += page.extract_text() + "\n"
+
+            text =text.replace("�", "ti")
             return text.strip()
         except Exception as e:
             raise Exception(f"Failed to extract text from PDF: {str(e)}") 

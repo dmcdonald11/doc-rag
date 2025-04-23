@@ -11,22 +11,22 @@ from lightrag.kg.shared_storage import initialize_pipeline_status
 from lightrag.utils import EmbeddingFunc, setup_logger
 from dotenv import load_dotenv
 
-class MCPResponse(BaseModel):
+class LightRAGResponse(BaseModel):
     """
-    Response model for LightRAG MCP service.
+    Response model for LightRAG service.
     """
     status: str
     message: str
     data: Optional[Dict[str, Any]] = None
 
-class MCPService:
+class LightRAGService:
     """
     Service for interacting with the LightRAG.
     """
     
     def __init__(self):
         """
-        Initialize the MCP service with configuration from environment variables.
+        Initialize the LightRAG service with configuration from environment variables.
         """
         load_dotenv()
         self.working_dir = os.getenv("LIGHTRAG_WORKING_DIR", "./local_neo4jWorkDir")
@@ -63,18 +63,18 @@ class MCPService:
         await self.rag.initialize_storages()
         await initialize_pipeline_status()
     
-    async def process_text(self, text: str) -> MCPResponse:
+    async def process_text(self, text: str) -> LightRAGResponse:
         """
-        Send text to the LightRAG MCP server for processing.
+        Send text to the LightRAG server for processing.
 
         Args:
             text (str): Text to be processed
 
         Returns:
-            MCPResponse: Response from the MCP server
+            LightRAGResponse: Response from the LightRAG server
 
         Raises:
-            Exception: If MCP processing fails
+            Exception: If LightRAG processing fails
         """
         try:
             # Initialize RAG if not already done
@@ -90,14 +90,14 @@ class MCPService:
                 param=QueryParam(mode="hybrid")
             )
             
-            return MCPResponse(
+            return LightRAGResponse(
                 status="success",
                 message="Text processed successfully",
                 data={"result": result}
             )
             
         except Exception as e:
-            return MCPResponse(
+            return LightRAGResponse(
                 status="error",
                 message=f"Failed to process text: {str(e)}"
             ) 
