@@ -9,7 +9,7 @@ from typing import List, Optional
 from dotenv import load_dotenv
 
 from services.pdf_service import PDFService
-from services.mcp_service import MCPService
+from services.lightrag_service import LightRAGService
 
 # Load environment variables
 load_dotenv()
@@ -20,7 +20,7 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 
 # Initialize services
 pdf_service = PDFService()
-mcp_service = MCPService()
+lightrag_service = LightRAGService()
 
 def process_pdf_file(file_path: Path) -> Optional[str]:
     """
@@ -49,7 +49,7 @@ async def process_with_lightrag(text: str) -> Optional[dict]:
         Optional[dict]: MCP response if successful, None otherwise
     """
     try:
-        return await mcp_service.process_text(text)
+        return await lightrag_service.process_text(text)
     except Exception as e:
         st.error(f"Error processing with LightRAG: {str(e)}")
         return None
@@ -94,12 +94,12 @@ async def main():
                         
                         # Process with LightRAG
                         st.write("Processing with LightRAG...")
-                        mcp_response = await process_with_lightrag(extracted_text)
+                        lightrag_response = await process_with_lightrag(extracted_text)
                         
-                        if mcp_response:
+                        if lightrag_response:
                             st.success("LightRAG processing complete!")
                             st.subheader("LightRAG Response")
-                            st.json(mcp_response)
+                            st.json(lightrag_response)
                 else:
                     st.info(f"File {file.name} uploaded successfully")
                     st.write("Note: Only PDF files are processed with LightRAG")
